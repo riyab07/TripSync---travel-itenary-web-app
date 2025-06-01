@@ -1,0 +1,27 @@
+self.recipes = [
+    {
+        'title': 'Tomato Onion Curry',
+        'ingredients': [
+            {'name': 'tomato', 'qty': 2},
+            {'name': 'onion', 'qty': 1},
+            {'name': 'spices', 'qty': 1}
+        ]
+    },
+    {
+        'title': 'Aloo Matar',
+        'ingredients': [
+            {'name': 'potato', 'qty': 3},
+            {'name': 'peas', 'qty': 1},
+            {'name': 'spices', 'qty': 1}
+        ]
+    },
+    {
+        'title': 'Vegetable Stir Fry',
+        'ingredients': [
+            {'name': 'carrot', 'qty': 2},
+            {'name': 'peas', 'qty': 1},
+            {'name': 'onion', 'qty': 1},
+            {'name': 'spices', 'qty': 1}
+        ]
+    }
+]

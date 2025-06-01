@@ -1,0 +1,23 @@
+[
+    {
+        "id": "1",
+        "name": "apple",
+        "qty": 3,
+        "storage": "fridge",
+        "expiry": "2025-10-08"
+    },
+    {
+        "id": "2",
+        "name": "tomato",
+        "qty": 5,
+        "storage": "fridge",
+        "expiry": "2025-01-01"
+    },
+    {
+        "id": "1",
+        "name": "apple",
+        "qty": 2,
+        "storage": "frige",
+        "expiry": "2025-10-10"
+    }
+]
