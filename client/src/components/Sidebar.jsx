@@ -11,6 +11,8 @@ function Sidebar() {
         <Link to="/dashboard">🏠 My Trips</Link>
         <Link to="/saved">💾 Saved Trips</Link>
         <Link to="/explore">🌍 Explore</Link>
+        <Link to="/feed">📸 Feed</Link>
+        <Link to="/profile">👤 Profile</Link>
       </div>
     </div>
   );
