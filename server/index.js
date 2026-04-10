@@ -13,11 +13,8 @@ const app = express();
 connectDB();
 
 app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    process.env.CLIENT_URL,
-  ],
-  credentials: true,
+  origin: '*',
+  credentials: false,
 }));
 app.use(express.json({ limit: '10mb' })); // 10mb for base64 images
 
