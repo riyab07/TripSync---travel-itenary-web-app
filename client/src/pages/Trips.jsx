@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
 import CreateTrip from "../components/CreateTrip";
 import api from "../api";
+import { useNavigate } from "react-router-dom";
 
 function Trips() {
   const [trips, setTrips] = useState([]);
   const [search, setSearch] = useState("");
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTrips = async () => {
@@ -132,12 +134,23 @@ function Trips() {
               key={trip._id}
               className="bg-white p-5 rounded-2xl shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-200 border border-gray-100"
             >
-              <div className="flex justify-between items-start mb-2">
-                <h3 className="font-semibold text-gray-800">{trip.title}</h3>
-                <button onClick={() => toggleLike(trip._id)} className="text-lg">
+              {/* Clickable title area */}
+              <div
+                className="flex justify-between items-start mb-2 cursor-pointer"
+                onClick={() => navigate(`/trips/${trip._id}`)}
+              >
+                <div>
+                  <h3 className="font-semibold text-gray-800">{trip.title}</h3>
+                  <p className="text-xs text-indigo-400 mt-0.5">Tap to open →</p>
+                </div>
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleLike(trip._id); }}
+                  className="text-lg"
+                >
                   {trip.liked ? "❤️" : "🤍"}
                 </button>
               </div>
+
               <p className="text-sm text-gray-500">📍 {trip.destination}</p>
               <p className="text-sm text-gray-500">💰 ₹{trip.budget}</p>
               <p className="text-sm text-gray-500">📅 {trip.date}</p>

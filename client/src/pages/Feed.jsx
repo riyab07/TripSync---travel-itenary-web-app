@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import api from "../api";
+import { useNavigate } from "react-router-dom";
 
 function Feed() {
+  const navigate = useNavigate();
+
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState({});
@@ -49,7 +52,9 @@ function Feed() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Feed 📸</h1>
-        <p className="text-sm text-gray-500 mt-1">Travel moments from the community</p>
+        <p className="text-sm text-gray-500 mt-1">
+          Travel moments from the community
+        </p>
       </div>
 
       {loading ? (
@@ -60,37 +65,60 @@ function Feed() {
           <p>No posts yet. Be the first to share!</p>
         </div>
       ) : (
-        <div className="max-w-xl mx-auto flex flex-col gap-6">
+        <div className="w-full max-w-xl mx-auto px-3 sm:px-0 flex flex-col gap-6">
           {posts.map((post) => (
-            <div key={post._id} className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-
+            <div
+              key={post._id}
+              className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
+            >
               {/* Author */}
               <div className="flex items-center gap-3 p-4 pb-2">
                 <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-bold text-indigo-600">
                   {post.author?.name?.charAt(0).toUpperCase()}
                 </div>
+
                 <div>
-                  <p className="text-sm font-semibold text-gray-800">{post.author?.name}</p>
+                  {/* ✅ CLICKABLE AUTHOR */}
+                  <p
+                    className="text-sm font-semibold text-gray-800 cursor-pointer hover:text-indigo-600 transition"
+                    onClick={() => navigate(`/user/${post.author?.name}`)}
+                  >
+                    {post.author?.name || "traveler"}
+                  </p>
+
                   {post.location && (
-                    <p className="text-xs text-gray-400">📍 {post.location}</p>
+                    <p className="text-xs text-gray-400">
+                      📍 {post.location}
+                    </p>
                   )}
                 </div>
               </div>
 
               {/* Image */}
               {post.image && (
-                <img src={post.image} alt="post" className="w-full object-cover max-h-80" />
+                <img
+                  src={post.image}
+                  alt="post"
+                  className="w-full object-cover max-h-80"
+                />
               )}
 
               {/* Caption + actions */}
               <div className="p-4">
-                <p className="text-sm text-gray-700 mb-3">{post.caption}</p>
+                <p className="text-sm text-gray-700 mb-3">
+                  {post.caption}
+                </p>
 
                 <div className="flex items-center gap-3 mb-4">
-                  <button onClick={() => toggleLike(post._id)} className="text-xl">
+                  <button
+                    onClick={() => toggleLike(post._id)}
+                    className="text-xl"
+                  >
                     {post.liked ? "❤️" : "🤍"}
                   </button>
-                  <span className="text-xs text-gray-400">{post.likes?.length || 0} likes</span>
+                  <span className="text-xs text-gray-400">
+                    {post.likes?.length || 0} likes
+                  </span>
                 </div>
 
                 {/* Comments */}
@@ -98,7 +126,8 @@ function Feed() {
                   <div className="mb-3 flex flex-col gap-1.5">
                     {post.comments.map((c, i) => (
                       <p key={i} className="text-xs text-gray-600">
-                        <span className="font-semibold">{c.name}</span> {c.text}
+                        <span className="font-semibold">{c.name}</span>{" "}
+                        {c.text}
                       </p>
                     ))}
                   </div>
@@ -111,9 +140,14 @@ function Feed() {
                     placeholder="Add a comment..."
                     value={commentText[post._id] || ""}
                     onChange={(e) =>
-                      setCommentText((prev) => ({ ...prev, [post._id]: e.target.value }))
+                      setCommentText((prev) => ({
+                        ...prev,
+                        [post._id]: e.target.value,
+                      }))
                     }
-                    onKeyDown={(e) => e.key === "Enter" && addComment(post._id)}
+                    onKeyDown={(e) =>
+                      e.key === "Enter" && addComment(post._id)
+                    }
                     className="flex-1 text-xs border border-gray-200 rounded-xl px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-300"
                   />
                   <button

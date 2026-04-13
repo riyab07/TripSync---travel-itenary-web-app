@@ -28,6 +28,7 @@ function TripDetail() {
   const [activeDay, setActiveDay] = useState(1);
   const [form, setForm] = useState({ activity: "", time: "", notes: "" });
   const [adding, setAdding] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     const fetchTrip = async () => {
@@ -44,6 +45,24 @@ function TripDetail() {
   }, [id]);
 
   const isOwner = trip?.author?._id === userId;
+
+  const handleCoverUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    setUploading(true);
+    const reader = new FileReader();
+    reader.onloadend = async () => {
+      try {
+        const { data } = await api.post(`/trips/${id}/cover`, { image: reader.result });
+        setTrip({ ...trip, coverImage: data.coverImage });
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setUploading(false);
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   const addActivity = async () => {
     if (!form.activity.trim()) return;
@@ -107,6 +126,19 @@ function TripDetail() {
         }`}>
           {trip.isPublic ? "🌍 Public" : "🔒 Private"}
         </span>
+
+        {/* Cover upload button — owner only */}
+        {isOwner && (
+          <label className="absolute bottom-4 right-4 bg-black/50 text-white text-xs px-3 py-1.5 rounded-xl cursor-pointer hover:bg-black/70 transition">
+            {uploading ? "Uploading..." : "📷 Change Cover"}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleCoverUpload}
+              className="hidden"
+            />
+          </label>
+        )}
       </div>
 
       {/* Trip Info */}
