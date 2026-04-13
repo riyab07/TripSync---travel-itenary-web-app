@@ -7,6 +7,8 @@ import Profile from "./pages/Profile";
 import Feed from "./pages/Feed";
 import Sidebar from "./components/Sidebar";
 import { useLocation } from "react-router-dom";
+import TripDetail from "./pages/TripDetail";
+import PublicProfile from "./pages/PublicProfile";
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("token");
@@ -36,6 +38,8 @@ function App() {
         <Route path="/explore" element={<ProtectedRoute><Explore /></ProtectedRoute>} />
         <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/trips/:id" element={<ProtectedRoute><TripDetail /></ProtectedRoute>} />
+        <Route path="/user/:username" element={<ProtectedRoute><PublicProfile /></ProtectedRoute>} />
       </Routes>
     </Layout>
   ) : (
@@ -45,5 +49,4 @@ function App() {
     </Routes>
   );
 }
-
 export default App;
