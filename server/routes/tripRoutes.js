@@ -1,8 +1,10 @@
 import express from 'express';
 import Trip from '../models/Trip.js';
 import protect from '../middleware/authMiddleware.js';
+import cloudinary from '../config/cloudinary.js';
 
 const router = express.Router();
+
 
 // GET /api/trips/explore — all public trips
 router.get('/explore', async (req, res) => {
@@ -122,6 +124,27 @@ router.put('/:id/save', protect, async (req, res) => {
     }
     await trip.save();
     res.json({ saved: !saved });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+// POST /api/trips/:id/cover
+router.post('/:id/cover', protect, async (req, res) => {
+  try {
+    const { image } = req.body;
+    const trip = await Trip.findById(req.params.id);
+    if (!trip) return res.status(404).json({ message: 'Trip not found' });
+    if (trip.author.toString() !== req.user._id.toString())
+      return res.status(403).json({ message: 'Not authorized' });
+
+    const uploaded = await cloudinary.uploader.upload(image, {
+      folder: 'tripsync/covers',
+      transformation: [{ width: 800, height: 400, crop: 'fill' }],
+    });
+
+    trip.coverImage = uploaded.secure_url;
+    await trip.save();
+    res.json({ coverImage: uploaded.secure_url });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
